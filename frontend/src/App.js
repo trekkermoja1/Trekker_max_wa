@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
-const BACKEND_URL = `https://${window.location.hostname}`;
+const BACKEND_URL = window.location.origin.replace('.5000', '.8000');
 
 // Trekker Logo Component
 const TrekkerLogo = () => (

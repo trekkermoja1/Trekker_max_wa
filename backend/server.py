@@ -100,6 +100,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def root():
+    return {"message": "TREKKER MAX WABOT API is running"}
+
 
 def get_next_port():
     """Get next available port for bot instance"""
