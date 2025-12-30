@@ -255,8 +255,39 @@ async def get_pairing_code(instance_id: str):
     return {
         "instance_id": instance_id,
         "pairing_code": status_data.get("pairingCode"),
+        "pairing_code_valid": status_data.get("pairingCodeValid", False),
+        "pairing_code_remaining_seconds": status_data.get("pairingCodeRemainingSeconds", 0),
+        "pairing_code_expires_at": status_data.get("pairingCodeExpiresAt"),
         "status": status_data.get("status")
     }
+
+
+@app.post("/api/instances/{instance_id}/regenerate-code")
+async def regenerate_pairing_code(instance_id: str):
+    """Regenerate pairing code for an instance"""
+    instance = await instances_collection.find_one({"_id": instance_id})
+    if not instance:
+        raise HTTPException(status_code=404, detail="Instance not found")
+    
+    port = instance.get("port")
+    if not port or instance_id not in bot_processes:
+        raise HTTPException(status_code=400, detail="Instance not running")
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(f"http://localhost:{port}/regenerate-code")
+            data = response.json()
+            return {
+                "instance_id": instance_id,
+                "success": data.get("success", False),
+                "pairing_code": data.get("pairingCode"),
+                "pairing_code_valid": data.get("pairingCodeValid", False),
+                "pairing_code_remaining_seconds": data.get("pairingCodeRemainingSeconds", 0),
+                "pairing_code_expires_at": data.get("pairingCodeExpiresAt"),
+                "status": data.get("status")
+            }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to regenerate code: {str(e)}")
 
 
 @app.post("/api/instances/{instance_id}/start")
