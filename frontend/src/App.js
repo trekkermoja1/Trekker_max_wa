@@ -282,12 +282,12 @@ const PairingModal = ({ instance, onClose, onRefresh }) => {
               <p className="text-emerald-400 font-medium text-lg">Successfully Connected!</p>
               <p className="text-gray-400 text-sm mt-2">Your bot is now active</p>
             </div>
-          ) : pairingCode && isValid ? (
+          ) : (pairingCode || isValid) ? (
             <>
               <div className="p-6 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 rounded-xl">
                 <p className="text-sm text-gray-400 mb-3">Your Pairing Code</p>
                 <p className="text-4xl font-mono font-bold text-white tracking-wider mb-4">
-                  {pairingCode}
+                  {pairingCode || "--- ---"}
                 </p>
                 {expiresAt && (
                   <CountdownTimer 
