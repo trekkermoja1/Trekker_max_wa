@@ -268,8 +268,23 @@ async def get_pairing_code(instance_id: str):
         raise HTTPException(status_code=404, detail="Instance not found")
     
     port = instance.get("port")
-    if not port or instance_id not in bot_processes:
-        raise HTTPException(status_code=400, detail="Instance not running")
+    # Check if process is still alive even if not in bot_processes
+    is_running = instance_id in bot_processes
+    if not is_running and instance.get("pid"):
+        try:
+            os.kill(instance.get("pid"), 0)
+            is_running = True
+        except OSError:
+            is_running = False
+
+    if not port or not is_running:
+        return {
+            "instance_id": instance_id,
+            "pairing_code": None,
+            "pairing_code_valid": False,
+            "pairing_code_remaining_seconds": 0,
+            "status": instance.get("status", "stopped")
+        }
     
     status_data = await get_instance_status(instance_id, port)
     

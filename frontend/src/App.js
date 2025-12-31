@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
-const BACKEND_URL = window.location.origin;
+const BACKEND_URL = '';
 
 // Trekker Logo Component
 const TrekkerLogo = () => (
