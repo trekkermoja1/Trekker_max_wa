@@ -615,27 +615,35 @@ function App() {
     );
   }
 
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUsername('');
+    setPassword('');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      {/* Floating Logout Button */}
+      {isAuthenticated && (
+        <div className="fixed bottom-8 right-8 z-50 group">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-6 py-4 bg-red-500 hover:bg-red-600 text-white rounded-2xl shadow-2xl shadow-red-500/30 transition-all duration-300 hover:scale-105 active:scale-95 border border-red-400/20"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span className="font-bold">Logout</span>
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <header className="border-b border-gray-700/50 bg-gray-900/50 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <TrekkerLogo />
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => {
-                  setIsAuthenticated(false);
-                  setUsername('');
-                  setPassword('');
-                }}
-                className="px-4 py-2 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl transition-all text-sm font-bold border border-red-500/20 flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Logout
-              </button>
               <button
                 onClick={() => setShowCreateModal(true)}
                 className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl hover:from-emerald-600 hover:to-teal-600 transition font-bold flex items-center gap-2 shadow-lg shadow-emerald-500/25"
